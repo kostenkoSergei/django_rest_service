@@ -16,5 +16,5 @@ class TODO(models.Model):
     note_text = models.TextField(blank=False, verbose_name='Заметка')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Создано')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Обновлено')
-    creator = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Автор заметки')
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор заметки')
     is_active = models.BooleanField(default=True, verbose_name='Статус')
