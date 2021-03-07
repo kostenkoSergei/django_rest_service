@@ -6,8 +6,10 @@ const UserItem = ({user}) => {
 
         <tr>
             <td scope="col">{user.username}</td>
-            <td scope="col">{user.first_name}</td>
-            <td scope="col">{user.last_name}</td>
+            <td scope="col">{user.firstName}</td>
+            {/*<td scope="col">{user.first_name}</td>*/}
+            <td scope="col">{user.lastName}</td>
+            {/*<td scope="col">{user.last_name}</td>*/}
             <td scope="col">{user.email}</td>
         </tr>
 
@@ -28,7 +30,7 @@ const UserList = ({users}) => {
                 </tr>
                 </thead>
                 <tbody>
-                {users.map((user) => <UserItem key={user.email} user={user}/>)}
+                {users.map((user) => <UserItem key={user.id} user={user}/>)}
                 </tbody>
             </table>
         </div>
