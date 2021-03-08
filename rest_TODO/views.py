@@ -3,7 +3,7 @@ from rest_framework.response import Response
 
 from rest_framework.viewsets import ModelViewSet
 from .models import Project, TODO
-from .serializers import ProjectModelSerializer, TodoModelSerializer
+from .serializers import ProjectModelSerializer, TodoModelSerializer, TodoModelFullSerializer
 from rest_framework.pagination import LimitOffsetPagination
 
 from .filters import TodoFilter
@@ -35,7 +35,7 @@ class ProjectModelViewSet(ModelViewSet):
 class TodoModelViewSet(ModelViewSet):
     """all methods are available"""
     queryset = TODO.objects.all()
-    serializer_class = TodoModelSerializer
+    # serializer_class = TodoModelSerializer
     pagination_class = ToDoLimitOffsetPagination
     filterset_class = TodoFilter
 
@@ -52,3 +52,8 @@ class TodoModelViewSet(ModelViewSet):
         if project:
             todos = todos.filter(project=project)
         return todos
+
+    def get_serializer_class(self, *args, **kwargs):
+        if self.request.method in ['POST', 'PUT']:
+            return TodoModelSerializer
+        return TodoModelFullSerializer

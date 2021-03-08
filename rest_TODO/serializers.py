@@ -1,4 +1,3 @@
-from rest_framework import serializers
 from rest_framework.relations import StringRelatedField
 from rest_framework.serializers import ModelSerializer, ValidationError
 from .models import TODO, Project
@@ -6,7 +5,7 @@ from rest_users.serializers import UserModelSerializer
 
 
 class ProjectModelSerializer(ModelSerializer):
-    contributors = StringRelatedField(many=True)
+    # contributors = StringRelatedField(many=True)
 
     def validate_name(self, value):
         if len(value) < 10:
@@ -19,12 +18,18 @@ class ProjectModelSerializer(ModelSerializer):
 
 
 class TodoModelSerializer(ModelSerializer):
-    project = ProjectModelSerializer()
-    # project = serializers.PrimaryKeyRelatedField(read_only=True)
-    creator = UserModelSerializer()
-    # creator = serializers.PrimaryKeyRelatedField(read_only=True)
+    """will be used in post and put methods. eliminates problems with nested fields while saving data"""
 
     class Meta:
         model = TODO
         fields = '__all__'
-        # fields = ('note_text', 'is_active')
+
+
+class TodoModelFullSerializer(ModelSerializer):
+    """will be used in get method for full data representation"""
+    project = ProjectModelSerializer()
+    creator = UserModelSerializer()
+
+    class Meta:
+        model = TODO
+        fields = '__all__'
