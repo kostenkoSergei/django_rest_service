@@ -17,8 +17,6 @@ const UserItem = ({user}) => {
 }
 
 const UserList = ({users}) => {
-    console.log('hi')
-    console.log(users)
     return (
 
         <div className="container">
