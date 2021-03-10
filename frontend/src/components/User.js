@@ -17,6 +17,8 @@ const UserItem = ({user}) => {
 }
 
 const UserList = ({users}) => {
+    console.log('hi')
+    console.log(users)
     return (
 
         <div className="container">
@@ -30,7 +32,7 @@ const UserList = ({users}) => {
                 </tr>
                 </thead>
                 <tbody>
-                {users.map((user) => <UserItem key={user.id} user={user}/>)}
+                {users.results.map((user) => <UserItem key={user.id} user={user}/>)}
                 </tbody>
             </table>
         </div>
