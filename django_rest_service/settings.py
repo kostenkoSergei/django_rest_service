@@ -145,3 +145,28 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 100,
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'basic': {
+            'format': '\n%(asctime)s - %(levelname)s - %(module)s - %(message)s'
+        }
+    },
+    'handlers': {
+        'basic': {
+            'level': 'INFO',
+            # 'class': 'logging.FileHandler',
+            'class': 'logging.FileHandler',
+            'filename': 'ToDologfile.log',
+            'formatter': 'basic'
+        },
+    },
+    'loggers': {
+        'service_log': {
+            'level': 'INFO',
+            'handlers': ['basic']
+        },
+    }
+}

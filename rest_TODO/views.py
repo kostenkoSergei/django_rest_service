@@ -7,6 +7,9 @@ from .serializers import ProjectModelSerializer, TodoModelSerializer, TodoModelF
 from rest_framework.pagination import LimitOffsetPagination
 
 from .filters import TodoFilter
+import logging
+
+log = logging.getLogger('service_log')
 
 
 class ProjectLimitOffsetPagination(LimitOffsetPagination):
@@ -43,6 +46,7 @@ class TodoModelViewSet(ModelViewSet):
         todo = self.get_object()
         todo.is_active = False
         todo.save()
+        log.info(f'{request.data} - current host: {request.get_host()} - current user: {request.user}')
         return Response(data='task is closed')
 
     def get_queryset(self):

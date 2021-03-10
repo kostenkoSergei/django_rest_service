@@ -1,0 +1,8 @@
+
+2021-03-10 20:55:14,050 - INFO - views - <QueryDict: {}> - <QueryDict: {}> - admin
+
+2021-03-10 20:58:09,119 - INFO - views - <QueryDict: {}> - {'charset': 'UTF-8'} - admin
+
+2021-03-10 21:01:43,981 - INFO - views - <QueryDict: {}> - 127.0.0.1:8000 - admin
+
+2021-03-10 21:02:39,523 - INFO - views - <QueryDict: {}> - current host: 127.0.0.1:8000 - current user: admin
