@@ -7,7 +7,15 @@ import ToDoList from "./components/Todos";
 import axios from "axios";
 import Footer from "./components/Footer";
 import Menu from "./components/Menu";
-import {HashRouter, Route} from 'react-router-dom'
+import {HashRouter, Route, Switch} from 'react-router-dom'
+
+const NotFound404 = ({location}) => {
+    return (
+        <div>
+            <h1>Страница по адресу '{location.pathname}' не найдена</h1>
+        </div>
+    )
+}
 
 class App extends React.Component {
     constructor(props) {
@@ -54,11 +62,13 @@ class App extends React.Component {
                 <HashRouter>
                     <Menu/>
                     <div className="wrapper flex-grow-1">
-
-                        <Route exact path='/' component={() => <UserList users={this.state.users}/>}/>
-                        <Route exact path='/projects' component={() => <ProjectList projects={this.state.projects}/>}/>
-                        <Route exact path='/todos' component={() => <ToDoList todos={this.state.todos}/>}/>
-
+                        <Switch>
+                            <Route exact path='/' component={() => <UserList users={this.state.users}/>}/>
+                            <Route exact path='/projects'
+                                   component={() => <ProjectList projects={this.state.projects}/>}/>
+                            <Route exact path='/todos' component={() => <ToDoList todos={this.state.todos}/>}/>
+                            <Route component={NotFound404} />
+                        </Switch>
                     </div>
                     <Footer/>
                 </HashRouter>
