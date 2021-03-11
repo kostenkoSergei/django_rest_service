@@ -51,15 +51,17 @@ class App extends React.Component {
     render() {
         return (
             <div className="d-flex flex-column min-vh-100">
-                <Menu/>
-                <div className="wrapper flex-grow-1">
-                    <HashRouter>
+                <HashRouter>
+                    <Menu/>
+                    <div className="wrapper flex-grow-1">
+
                         <Route exact path='/' component={() => <UserList users={this.state.users}/>}/>
                         <Route exact path='/projects' component={() => <ProjectList projects={this.state.projects}/>}/>
                         <Route exact path='/todos' component={() => <ToDoList todos={this.state.todos}/>}/>
-                    </HashRouter>
-                </div>
-                <Footer/>
+
+                    </div>
+                    <Footer/>
+                </HashRouter>
             </div>
 
         )
