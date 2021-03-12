@@ -1,5 +1,5 @@
 import React from "react";
-import {HashRouter, Route, Link} from 'react-router-dom'
+import {BrowserRouter, Route, Link} from 'react-router-dom'
 
 const Menu = () => {
     return (

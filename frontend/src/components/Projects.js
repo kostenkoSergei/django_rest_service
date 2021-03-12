@@ -1,11 +1,13 @@
 import React from "react";
 import App from "../App";
+import {Link} from "react-router-dom";
 
 const ProjectItem = ({project}) => {
     return (
 
         <tr>
-            <td scope="col">{project.name}</td>
+            <td><Link to={`project/${project.id}`}>{project.name}</Link></td>
+            {/*<td scope="col">{project.name}</td>*/}
             <td scope="col">{project.repoLink}</td>
             <td scope="col">{project.contributors.join(', ')}</td>
         </tr>

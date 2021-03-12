@@ -4,10 +4,11 @@ import './App.css';
 import UserList from "./components/User";
 import ProjectList from "./components/Projects";
 import ToDoList from "./components/Todos";
+import ProjectToDoList from "./components/ProjectInfo";
 import axios from "axios";
 import Footer from "./components/Footer";
 import Menu from "./components/Menu";
-import {HashRouter, Route, Switch} from 'react-router-dom'
+import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom'
 
 const NotFound404 = ({location}) => {
     return (
@@ -59,7 +60,7 @@ class App extends React.Component {
     render() {
         return (
             <div className="d-flex flex-column min-vh-100">
-                <HashRouter>
+                <BrowserRouter>
                     <Menu/>
                     <div className="wrapper flex-grow-1">
                         <Switch>
@@ -67,11 +68,15 @@ class App extends React.Component {
                             <Route exact path='/projects'
                                    component={() => <ProjectList projects={this.state.projects}/>}/>
                             <Route exact path='/todos' component={() => <ToDoList todos={this.state.todos}/>}/>
-                            <Route component={NotFound404} />
+                            <Route path="/project/:id">
+                                <ProjectToDoList todos={this.state.todos}/>
+                            </Route>
+                            <Redirect from='/users' to='/'/>
+                            <Route component={NotFound404}/>
                         </Switch>
                     </div>
                     <Footer/>
-                </HashRouter>
+                </BrowserRouter>
             </div>
 
         )
