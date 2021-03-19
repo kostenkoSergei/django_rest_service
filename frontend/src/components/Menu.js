@@ -17,9 +17,9 @@ const Menu = () => {
                             <li className="nav-item">
                                 <Link to='/todos' className="navbar-brand">TODOs</Link>
                             </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="#">Войти <i className="fas fa-sign-in-alt"></i></a>
-                            </li>
+                            {/*<li className="nav-item">*/}
+                            {/*    <a className="nav-link" href="#">Войти <i className="fas fa-sign-in-alt"></i></a>*/}
+                            {/*</li>*/}
                         </ul>
                     </div>
                 </div>
