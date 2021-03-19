@@ -9,6 +9,7 @@ import axios from "axios";
 import Footer from "./components/Footer";
 import Menu from "./components/Menu";
 import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom'
+// import {HashRouter, Route, Switch, Redirect} from 'react-router-dom'
 
 const NotFound404 = ({location}) => {
     return (
