@@ -9,8 +9,9 @@ import LoginForm from './components/Auth.js'
 import axios from "axios";
 import Footer from "./components/Footer";
 import Menu from "./components/Menu";
-import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom'
+import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
 // import {HashRouter, Route, Switch, Redirect} from 'react-router-dom'
+import Cookies from 'universal-cookie';
 
 const NotFound404 = ({location}) => {
     return (
@@ -26,7 +27,8 @@ class App extends React.Component {
         this.state = {
             'users': {'results': []},
             'projects': {'results': []},
-            'todos': {'results': []}
+            'todos': {'results': []},
+            'token': '',
         }
     }
 
@@ -59,23 +61,57 @@ class App extends React.Component {
             }).catch(error => console.log(error))
     }
 
+    set_token(token) {
+        const cookies = new Cookies()
+        cookies.set('token', token)
+        this.setState({'token': token})
+        console.log('hi')
+    }
+
+    is_authenticated() {
+        return this.state.token != ''
+    }
+
+    logout() {
+        this.set_token('')
+    }
+
+    get_token_from_storage() {
+        const cookies = new Cookies()
+        const token = cookies.get('token')
+        this.setState({'token': token})
+    }
+
+
+    // get_token(username, password) {
+    //     axios.post('http://127.0.0.1:8000/api-token-auth/', {username: username, password: password})
+    //         .then(response => {
+    //             console.log(response.data)
+    //         }).catch(error => alert('Неверный логин или пароль'))
+    // }
+
     get_token(username, password) {
         axios.post('http://127.0.0.1:8000/api-token-auth/', {username: username, password: password})
             .then(response => {
-                console.log(response.data)
+                console.log(response.data['token'])
+                this.set_token(response.data['token'])
             }).catch(error => alert('Неверный логин или пароль'))
     }
 
 
     componentDidMount() {
         this.load_data()
+        this.get_token_from_storage()
     }
 
     render() {
         return (
             <div className="d-flex flex-column min-vh-100">
                 <BrowserRouter>
-                    <Menu/>
+                    <Menu
+                        is_authenticated={this.is_authenticated()}
+                        logout={this.logout}
+                    />
                     <div className="wrapper flex-grow-1">
                         <Switch>
                             <Route exact path='/' component={() => <UserList users={this.state.users}/>}/>
