@@ -62,6 +62,7 @@ class App extends React.Component {
     }
 
     set_token(token) {
+        console.log('=============================================')
         const cookies = new Cookies()
         cookies.set('token', token)
         this.setState({'token': token})
@@ -72,8 +73,8 @@ class App extends React.Component {
         return this.state.token != ''
     }
 
-    logout() {
-        this.set_token('')
+    logout(context) {
+        context.set_token('')
     }
 
     get_token_from_storage() {
@@ -100,6 +101,7 @@ class App extends React.Component {
 
 
     componentDidMount() {
+        console.log(this)
         this.load_data()
         this.get_token_from_storage()
     }
@@ -111,6 +113,7 @@ class App extends React.Component {
                     <Menu
                         is_authenticated={this.is_authenticated()}
                         logout={this.logout}
+                        app={this}
                     />
                     <div className="wrapper flex-grow-1">
                         <Switch>
