@@ -17,6 +17,9 @@ const Menu = () => {
                             <li className="nav-item">
                                 <Link to='/todos' className="navbar-brand">TODOs</Link>
                             </li>
+                            <li className="nav-item">
+                                <Link to='/login' className="navbar-brand" style={{color: 'red'}}>Login</Link>
+                            </li>
                             {/*<li className="nav-item">*/}
                             {/*    <a className="nav-link" href="#">Войти <i className="fas fa-sign-in-alt"></i></a>*/}
                             {/*</li>*/}

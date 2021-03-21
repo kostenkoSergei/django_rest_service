@@ -5,6 +5,7 @@ import UserList from "./components/User";
 import ProjectList from "./components/Projects";
 import ToDoList from "./components/Todos";
 import ProjectToDoList from "./components/ProjectInfo";
+import LoginForm from './components/Auth.js'
 import axios from "axios";
 import Footer from "./components/Footer";
 import Menu from "./components/Menu";
@@ -29,8 +30,8 @@ class App extends React.Component {
         }
     }
 
-     load_data() {
-         axios.get('http://127.0.0.1:8000/api/users')
+    load_data() {
+        axios.get('http://127.0.0.1:8000/api/users')
             .then(response => {
                 const users = response.data
                 this.setState({
@@ -39,7 +40,7 @@ class App extends React.Component {
                 )
             }).catch(error => console.log(error))
 
-         axios.get('http://127.0.0.1:8000/api/projects')
+        axios.get('http://127.0.0.1:8000/api/projects')
             .then(response => {
                 const projects = response.data
                 this.setState({
@@ -48,7 +49,7 @@ class App extends React.Component {
                 )
             }).catch(error => console.log(error))
 
-         axios.get('http://127.0.0.1:8000/api/todos')
+        axios.get('http://127.0.0.1:8000/api/todos')
             .then(response => {
                 const todos = response.data
                 this.setState({
@@ -73,6 +74,7 @@ class App extends React.Component {
                             <Route exact path='/projects'
                                    component={() => <ProjectList projects={this.state.projects}/>}/>
                             <Route exact path='/todos' component={() => <ToDoList todos={this.state.todos}/>}/>
+                            <Route exact path='/login' component={() => <LoginForm/>}/>
                             <Route path="/project/:id">
                                 <ProjectToDoList todos={this.state.todos}/>
                             </Route>
