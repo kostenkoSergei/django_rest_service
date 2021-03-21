@@ -29,8 +29,8 @@ class App extends React.Component {
         }
     }
 
-    async componentDidMount() {
-        await axios.get('http://127.0.0.1:8000/api/users')
+     load_data() {
+         axios.get('http://127.0.0.1:8000/api/users')
             .then(response => {
                 const users = response.data
                 this.setState({
@@ -39,7 +39,7 @@ class App extends React.Component {
                 )
             }).catch(error => console.log(error))
 
-        await axios.get('http://127.0.0.1:8000/api/projects')
+         axios.get('http://127.0.0.1:8000/api/projects')
             .then(response => {
                 const projects = response.data
                 this.setState({
@@ -48,7 +48,7 @@ class App extends React.Component {
                 )
             }).catch(error => console.log(error))
 
-        await axios.get('http://127.0.0.1:8000/api/todos')
+         axios.get('http://127.0.0.1:8000/api/todos')
             .then(response => {
                 const todos = response.data
                 this.setState({
@@ -56,6 +56,10 @@ class App extends React.Component {
                     }
                 )
             }).catch(error => console.log(error))
+    }
+
+    componentDidMount() {
+        this.load_data()
     }
 
     render() {
