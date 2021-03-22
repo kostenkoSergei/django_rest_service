@@ -29,11 +29,13 @@ class App extends React.Component {
             'projects': {'results': []},
             'todos': {'results': []},
             'token': '',
+            'username': '',
         }
     }
 
     load_data() {
-        axios.get('http://127.0.0.1:8000/api/users')
+        const headers = this.get_headers()
+        axios.get('http://127.0.0.1:8000/api/users', {headers})
             .then(response => {
                 const users = response.data
                 this.setState({
@@ -42,7 +44,7 @@ class App extends React.Component {
                 )
             }).catch(error => console.log(error))
 
-        axios.get('http://127.0.0.1:8000/api/projects')
+        axios.get('http://127.0.0.1:8000/api/projects', {headers})
             .then(response => {
                 const projects = response.data
                 this.setState({
@@ -51,7 +53,7 @@ class App extends React.Component {
                 )
             }).catch(error => console.log(error))
 
-        axios.get('http://127.0.0.1:8000/api/todos')
+        axios.get('http://127.0.0.1:8000/api/todos', {headers})
             .then(response => {
                 const todos = response.data
                 this.setState({
@@ -62,11 +64,9 @@ class App extends React.Component {
     }
 
     set_token(token) {
-        console.log('=============================================')
         const cookies = new Cookies()
         cookies.set('token', token)
-        this.setState({'token': token})
-        console.log('hi')
+        this.setState({'token': token}, () => this.load_data())
     }
 
     is_authenticated() {
@@ -80,7 +80,7 @@ class App extends React.Component {
     get_token_from_storage() {
         const cookies = new Cookies()
         const token = cookies.get('token')
-        this.setState({'token': token})
+        this.setState({'token': token}, () => this.load_data())
     }
 
 
@@ -95,14 +95,24 @@ class App extends React.Component {
         axios.post('http://127.0.0.1:8000/api-token-auth/', {username: username, password: password})
             .then(response => {
                 console.log(response.data['token'])
+                this.state.username = username
                 this.set_token(response.data['token'])
             }).catch(error => alert('Неверный логин или пароль'))
     }
 
+    get_headers() {
+        let headers = {
+            'Content-Type': 'application/json'
+        }
+        if (this.is_authenticated()) {
+            headers['Authorization'] = 'Token ' + this.state.token
+        }
+        return headers
+    }
+
 
     componentDidMount() {
-        console.log(this)
-        this.load_data()
+        // this.load_data()
         this.get_token_from_storage()
     }
 
@@ -114,6 +124,7 @@ class App extends React.Component {
                         is_authenticated={this.is_authenticated()}
                         logout={this.logout}
                         app={this}
+                        username={this.state.username}
                     />
                     <div className="wrapper flex-grow-1">
                         <Switch>
@@ -122,7 +133,8 @@ class App extends React.Component {
                                    component={() => <ProjectList projects={this.state.projects}/>}/>
                             <Route exact path='/todos' component={() => <ToDoList todos={this.state.todos}/>}/>
                             <Route exact path='/login' component={() => <LoginForm
-                                get_token={(username, password) => this.get_token(username, password)}/>}/>
+                                get_token={(username, password) => this.get_token(username, password)}/>}
+                            />
                             <Route path="/project/:id">
                                 <ProjectToDoList todos={this.state.todos}/>
                             </Route>

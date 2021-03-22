@@ -20,8 +20,10 @@ const Menu = (context) => {
                             </li>
                             <li className="nav-item">
                                 {context.is_authenticated ?
-                                    <button onClick={() => context.logout(context.app)}>Logout</button> :
-                                    <Link to='/login' className="navbar-brand" style={{color: 'red'}}>Login</Link>}
+                                    <div><span style={{color: 'red'}}>{context.username} </span>
+                                        <button onClick={() => context.logout(context.app)}>Выйти</button>
+                                    </div> :
+                                    <Link to='/login' className="navbar-brand" style={{color: 'red'}}>Войти</Link>}
                                 {/*<Link to='/login' className="navbar-brand" style={{color: 'red'}}>Login</Link>*/}
                             </li>
                             {/*<li className="nav-item">*/}
