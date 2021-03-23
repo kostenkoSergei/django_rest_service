@@ -1,7 +1,8 @@
 import React from "react";
-import {BrowserRouter, Route, Link} from 'react-router-dom'
+import {BrowserRouter, Route, Link} from 'react-router-dom';
+import App from "../App";
 
-const Menu = () => {
+const Menu = (context) => {
     return (
         <div className="menu">
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top mb-5">
@@ -16,6 +17,14 @@ const Menu = () => {
                             </li>
                             <li className="nav-item">
                                 <Link to='/todos' className="navbar-brand">TODOs</Link>
+                            </li>
+                            <li className="nav-item">
+                                {context.is_authenticated ?
+                                    <div><span style={{color: 'red'}}>{context.username} </span>
+                                        <button onClick={() => context.logout(context.app)}>Выйти</button>
+                                    </div> :
+                                    <Link to='/login' className="navbar-brand" style={{color: 'red'}}>Войти</Link>}
+                                {/*<Link to='/login' className="navbar-brand" style={{color: 'red'}}>Login</Link>*/}
                             </li>
                             {/*<li className="nav-item">*/}
                             {/*    <a className="nav-link" href="#">Войти <i className="fas fa-sign-in-alt"></i></a>*/}
