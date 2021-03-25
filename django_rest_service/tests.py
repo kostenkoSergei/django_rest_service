@@ -77,3 +77,21 @@ class TestProjectsViewSet(TestCase):
         self.assertEqual(todo.project, project)
         self.assertEqual(todo.note_text, 'some new link')
         client.logout()
+
+
+class TestBookViewSet(APITestCase):
+
+    def test_get_list(self):
+        response = self.client.get('/api/projects/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_edit_admin(self):
+        project = Project.objects.create(name='Test3', repo_link='some link')
+        admin = User.objects.create_superuser('admin6', 'admin@admin.com', 'admin123456')
+        todo = TODO.objects.create(project=project, note_text='some link1', creator=admin)
+        self.client.login(username='admin6', password='admin123456')
+        response = self.client.put(f'/api/todos/{todo.pk}/',
+                                   {'note_text': 'new text', 'project': project.pk, "creator": 1})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        todo = TODO.objects.get(id=todo.id)
+        self.assertEqual(todo.note_text, 'new text')
