@@ -1,0 +1,60 @@
+import json
+from django.test import TestCase
+from rest_framework import status
+from rest_framework.test import APIRequestFactory, force_authenticate, APIClient, APISimpleTestCase, APITestCase
+from mixer.backend.django import mixer
+# from django.contrib.auth.models import User
+from rest_TODO.views import ProjectModelViewSet, TodoModelViewSet
+from rest_users.views import UserModelViewSet
+from rest_TODO.models import TODO, Project
+from rest_users.models import User
+from django.contrib.auth import get_user_model
+
+
+class TestProjectsViewSet(TestCase):
+    # APIRequestFactory
+    # tests for unauthorized users
+    def test_get_list(self):
+        """to check page with projects list"""
+        factory = APIRequestFactory()
+        request = factory.get('/api/projects/')
+        view = ProjectModelViewSet.as_view({'get': 'list'})
+        response = view(request)
+        print(response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_create_guest(self):
+        """to check note creation by unauthorised user"""
+        factory = APIRequestFactory()
+        request = factory.post('/api/todos/',
+                               {"project": 1, "note_text": "some text", "creator": 14, "is_active": False},
+                               format='json')
+        view = TodoModelViewSet.as_view({'post': 'create'})
+        response = view(request)
+        print(response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    # test for authorized users
+    def test_create_admin(self):
+        factory = APIRequestFactory()
+        project = Project.objects.create(name='Test', repo_link='some link')  # created project for test database (pk=1)
+        request = factory.post('/api/todos/',
+                               {"project": 1, "note_text": "test",
+                                "creator": 1, "is_active": True},
+                               format='json')
+        admin = User.objects.create_superuser('admin', 'testadmin@admin.com', 'admin123456')  # created user (pk=1)
+        print(admin.is_superuser)
+        print(admin.is_staff)
+        force_authenticate(request, admin)
+        view = TodoModelViewSet.as_view({'post': 'create'})
+        response = view(request)
+        print(response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    # APIClient
+    def test_get_detail(self):
+        project = Project.objects.create(name='Test', repo_link='some link')
+        client = APIClient()
+        response = client.get(f'/api/projects/{project.id}/')
+        print(response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
