@@ -58,3 +58,22 @@ class TestProjectsViewSet(TestCase):
         response = client.get(f'/api/projects/{project.id}/')
         print(response.status_code)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_edit_guest(self):
+        project = Project.objects.create(name='Test', repo_link='some link')
+        client = APIClient()
+        response = client.put(f'/api/projects/{project.id}/', {"name": "Test2"})
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_edit_admin(self):
+        project = Project.objects.create(name='Test2', repo_link='some link')
+        client = APIClient()
+        admin = User.objects.create_superuser('admin5', 'admin5@admin.com', 'admin1234567')
+        todo = TODO.objects.create(project=project, note_text='some link1', creator=admin)
+        client.login(username='admin5', password='admin1234567')
+        response = client.put(f'/api/todos/{todo.pk}/', {"project": 1, "note_text": "some new link", "creator": 1})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        todo = TODO.objects.get(id=todo.id)
+        self.assertEqual(todo.project, project)
+        self.assertEqual(todo.note_text, 'some new link')
+        client.logout()
