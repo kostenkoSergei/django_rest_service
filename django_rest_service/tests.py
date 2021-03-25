@@ -79,6 +79,7 @@ class TestProjectsViewSet(TestCase):
         client.logout()
 
 
+# APITestCase
 class TestBookViewSet(APITestCase):
 
     def test_get_list(self):
@@ -90,6 +91,18 @@ class TestBookViewSet(APITestCase):
         admin = User.objects.create_superuser('admin6', 'admin@admin.com', 'admin123456')
         todo = TODO.objects.create(project=project, note_text='some link1', creator=admin)
         self.client.login(username='admin6', password='admin123456')
+        response = self.client.put(f'/api/todos/{todo.pk}/',
+                                   {'note_text': 'new text', 'project': project.pk, "creator": 1})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        todo = TODO.objects.get(id=todo.id)
+        self.assertEqual(todo.note_text, 'new text')
+
+    def test_edit_mixer(self):
+        """using mixer"""
+        project = mixer.blend(Project)
+        admin = User.objects.create_superuser('admin', 'admin@admin.com', 'admin123456')
+        todo = TODO.objects.create(project=project, note_text='some link1', creator=admin)
+        self.client.login(username='admin', password='admin123456')
         response = self.client.put(f'/api/todos/{todo.pk}/',
                                    {'note_text': 'new text', 'project': project.pk, "creator": 1})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
