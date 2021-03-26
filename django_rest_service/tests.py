@@ -89,8 +89,8 @@ class TestBookViewSet(APITestCase):
     def test_edit_admin(self):
         """using mixer"""
         project = mixer.blend(Project)
+        todo = mixer.blend(TODO)
         admin = User.objects.create_superuser('admin6', 'admin@admin.com', 'admin123456')
-        todo = TODO.objects.create(project=project, note_text='some link1', creator=admin)
         self.client.login(username='admin6', password='admin123456')
         response = self.client.put(f'/api/todos/{todo.pk}/',
                                    {'note_text': 'new text', 'project': project.pk, "creator": 1})
