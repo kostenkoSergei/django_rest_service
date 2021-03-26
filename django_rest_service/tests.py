@@ -87,7 +87,8 @@ class TestBookViewSet(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_edit_admin(self):
-        project = Project.objects.create(name='Test3', repo_link='some link')
+        """using mixer"""
+        project = mixer.blend(Project)
         admin = User.objects.create_superuser('admin6', 'admin@admin.com', 'admin123456')
         todo = TODO.objects.create(project=project, note_text='some link1', creator=admin)
         self.client.login(username='admin6', password='admin123456')
