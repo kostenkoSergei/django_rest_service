@@ -3,7 +3,7 @@ from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import viewsets, mixins
 from .models import User
-from .serializers import UserModelSerializer
+from .serializers import UserModelSerializer, UserModelCredentialsSerializer
 
 
 class UserModelViewSet(ModelViewSet):
@@ -13,6 +13,10 @@ class UserModelViewSet(ModelViewSet):
     serializer_class = UserModelSerializer
     http_method_names = ['get', 'put', 'head']
 
+    def get_serializer_class(self):
+        if self.request.version == '2.0':
+            return UserModelCredentialsSerializer
+        return UserModelSerializer
 
 # class UserModelViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin,
 #                        viewsets.GenericViewSet):
