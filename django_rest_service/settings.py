@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django_filters',
     'rest_framework.authtoken',
     'drf_yasg',
+    "graphene_django",
     # my own
     'rest_users',
     'rest_TODO',
@@ -188,4 +189,8 @@ LOGGING = {
             'handlers': ['basic']
         },
     }
+}
+
+GRAPHENE = {
+    "SCHEMA": "django_rest_service.schema.schema"
 }
