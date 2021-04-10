@@ -25,12 +25,19 @@ class UserType(DjangoObjectType):
 class Query(graphene.ObjectType):
     all_TODOS = graphene.List(TODOType)
     all_projects = graphene.List(ProjectType)
+    project_by_id = graphene.Field(ProjectType, id=graphene.Int(required=True))
 
     def resolve_all_TODOS(root, info):
         return TODO.objects.all()
 
     def resolve_all_projects(root, info):
         return Project.objects.all()
+
+    def resolve_project_by_id(self, info, id):
+        try:
+            return Project.objects.get(id=id)
+        except Project.DoesNotExist:
+            return None
 
 
 schema = graphene.Schema(query=Query)
