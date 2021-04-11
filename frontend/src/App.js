@@ -12,6 +12,7 @@ import Menu from "./components/Menu";
 import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
 // import {HashRouter, Route, Switch, Redirect} from 'react-router-dom'
 import Cookies from 'universal-cookie';
+import ProjectForm from "./components/ProjectForm";
 
 const NotFound404 = ({location}) => {
     return (
@@ -128,6 +129,18 @@ class App extends React.Component {
             }).catch(error => console.log(error))
     }
 
+    createProject(name, repoLink, contributors) {
+        const headers = this.get_headers()
+        const data = {name: name, repo_link: repoLink, contributors: JSON.parse("[" + contributors + "]")}
+        // const data = {name: name, repo_link: repoLink}
+        console.log(data)
+        axios.post(`http://127.0.0.1:8000/api/projects/`, data, {headers: headers})
+            .then(response => {
+                let new_project = response.data
+                this.setState({projects: [...this.state.projects, new_project]})
+            }).catch(error => console.log(error))
+    }
+
 
     componentDidMount() {
         // this.load_data()
@@ -156,6 +169,8 @@ class App extends React.Component {
                             <Route exact path='/login' component={() => <LoginForm
                                 get_token={(username, password) => this.get_token(username, password)}/>}
                             />
+                            <Route exact path='/projects/create' component={() => <ProjectForm
+                                createProject={(name, repoLink, contributors) => this.createProject(name, repoLink, contributors)}/>}/>
                             <Route path="/project/:id">
                                 <ProjectToDoList todos={this.state.todos}/>
                             </Route>

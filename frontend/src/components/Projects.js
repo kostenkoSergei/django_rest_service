@@ -36,6 +36,7 @@ const ProjectList = ({projects, deleteProject}) => {
                                                                 deleteProject={deleteProject}/>)}
                 </tbody>
             </table>
+            <Link to='/projects/create'>Create</Link>
         </div>
 
     )
