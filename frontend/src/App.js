@@ -13,6 +13,7 @@ import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
 // import {HashRouter, Route, Switch, Redirect} from 'react-router-dom'
 import Cookies from 'universal-cookie';
 import ProjectForm from "./components/ProjectForm";
+import TodoForm from "./components/TodoForm";
 
 const NotFound404 = ({location}) => {
     return (
@@ -141,6 +142,17 @@ class App extends React.Component {
             }).catch(error => console.log(error))
     }
 
+    createTodo(project, noteText, creator) {
+        const headers = this.get_headers()
+        const data = {project: parseInt(project), note_text: noteText, creator: parseInt(creator)}
+        console.log(data)
+        axios.post(`http://127.0.0.1:8000/api/todos/`, data, {headers: headers})
+            .then(response => {
+                let new_todo = response.data
+                this.setState({todos: [...this.state.todos, new_todo]})
+            }).catch(error => console.log(error))
+    }
+
 
     componentDidMount() {
         // this.load_data()
@@ -171,6 +183,8 @@ class App extends React.Component {
                             />
                             <Route exact path='/projects/create' component={() => <ProjectForm
                                 createProject={(name, repoLink, contributors) => this.createProject(name, repoLink, contributors)}/>}/>
+                            <Route exact path='/todos/create' component={() => <TodoForm
+                                createTodo={(project, noteText, creator) => this.createTodo(project, noteText, creator)}/>}/>
                             <Route path="/project/:id">
                                 <ProjectToDoList todos={this.state.todos}/>
                             </Route>

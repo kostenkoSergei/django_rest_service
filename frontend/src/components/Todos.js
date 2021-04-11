@@ -1,5 +1,6 @@
 import React from "react";
 import App from "../App";
+import {Link} from "react-router-dom";
 
 
 const ToDoItem = ({todo, deleteTODO}) => {
@@ -42,6 +43,7 @@ const ToDoList = ({todos, deleteTODO}) => {
                 {todos.results.map((todo) => <ToDoItem key={todo.id} todo={todo} deleteTODO={deleteTODO}/>)}
                 </tbody>
             </table>
+            <Link to='/todos/create'>Create</Link>
         </div>
 
     )

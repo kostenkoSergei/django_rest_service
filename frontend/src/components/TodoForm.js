@@ -1,10 +1,10 @@
 import React from 'react'
 
 
-class ProjectForm extends React.Component {
+class TodoForm extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {name: '', repoLink: '', contributors: ''}
+        this.state = {project: 0, noteText: '', creator: 0}
     }
 
     handleChange(event) {
@@ -16,7 +16,7 @@ class ProjectForm extends React.Component {
     }
 
     handleSubmit(event) {
-        this.props.createProject(this.state.name, this.state.repoLink, this.state.contributors)
+        this.props.createTodo(this.state.project, this.state.noteText, this.state.creator)
         event.preventDefault()
     }
 
@@ -25,22 +25,22 @@ class ProjectForm extends React.Component {
             <div className="container">
                 <form onSubmit={(event) => this.handleSubmit(event)}>
                     <div className="form-group">
-                        <label htmlFor="name">name</label>
-                        <input type="text" className="form-control" name="name" value={this.state.name}
+                        <label htmlFor="project">project</label>
+                        <input type="number" className="form-control" name="project" value={this.state.project}
                                onChange={(event) => this.handleChange(event)}/>
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="repoLink">repo link</label>
+                        <label htmlFor="noteText">note text</label>
 
-                        <input type="text" className="form-control" name="repoLink" value={this.state.repoLink}
+                        <input type="text" className="form-control" name="noteText" value={this.state.noteText}
                                onChange={(event) => this.handleChange(event)}/>
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="contributors">contributors</label>
+                        <label htmlFor="creator">creator</label>
 
-                        <input type="text" className="form-control" name="contributors" value={this.state.contributors}
+                        <input type="number" className="form-control" name="creator" value={this.state.creator}
                                onChange={(event) => this.handleChange(event)}/>
                     </div>
 
@@ -52,4 +52,4 @@ class ProjectForm extends React.Component {
     }
 }
 
-export default ProjectForm
+export default TodoForm
