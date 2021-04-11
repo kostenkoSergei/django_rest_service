@@ -15,19 +15,25 @@ class TodoForm extends React.Component {
         );
     }
 
+
     handleSubmit(event) {
         this.props.createTodo(this.state.project, this.state.noteText, this.state.creator)
         event.preventDefault()
     }
 
     render() {
+        console.log(this.props.users.results)
+        // console.log(this.props.projects.results)
         return (
             <div className="container">
                 <form onSubmit={(event) => this.handleSubmit(event)}>
                     <div className="form-group">
                         <label htmlFor="project">project</label>
-                        <input type="number" className="form-control" name="project" value={this.state.project}
-                               onChange={(event) => this.handleChange(event)}/>
+
+                        <select name="project" className='form-control' onChange={(event) => this.handleChange(event)}>
+                            {this.props.projects.results.map((item) => <option value={item.id}>{item.id}</option>)}
+                        </select>
+
                     </div>
 
                     <div className="form-group">
@@ -40,11 +46,12 @@ class TodoForm extends React.Component {
                     <div className="form-group">
                         <label htmlFor="creator">creator</label>
 
-                        <input type="number" className="form-control" name="creator" value={this.state.creator}
-                               onChange={(event) => this.handleChange(event)}/>
-                    </div>
+                        <select name="creator" className='form-control' onChange={(event) => this.handleChange(event)}>
+                            {this.props.users.results.map((item) => <option value={item.id}>{item.id}</option>)}
+                        </select>
 
-                    <input type="submit" className="btn btn-primary mt-5" value="Save"/>
+                    </div>
+                    <input type="submit" className="btn btn-primary" value="Save"/>
                 </form>
             </div>
 
