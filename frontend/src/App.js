@@ -110,6 +110,24 @@ class App extends React.Component {
         return headers
     }
 
+    deleteProject(id) {
+        const headers = this.get_headers()
+        axios.delete(`http://127.0.0.1:8000/api/projects/${id}`, {headers: headers})
+            .then(response => {
+                this.setState({projects: this.state.projects.filter((item) => item.id !== id)})
+            }).catch(error => console.log(error))
+    }
+
+    deleteTODO(id) {
+        // destroy method for todo makes it's status is_active=False
+        const headers = this.get_headers()
+        axios.delete(`http://127.0.0.1:8000/api/todos/${id}`, {headers: headers})
+            .then(response => {
+                console.log(response.status)
+                this.setState({todos: this.state.todos.filter((item) => item.id !== id)})
+            }).catch(error => console.log(error))
+    }
+
 
     componentDidMount() {
         // this.load_data()
@@ -130,8 +148,11 @@ class App extends React.Component {
                         <Switch>
                             <Route exact path='/' component={() => <UserList users={this.state.users}/>}/>
                             <Route exact path='/projects'
-                                   component={() => <ProjectList projects={this.state.projects}/>}/>
-                            <Route exact path='/todos' component={() => <ToDoList todos={this.state.todos}/>}/>
+                                   component={() => <ProjectList projects={this.state.projects}
+                                                                 deleteProject={(id) => this.deleteProject(id)}/>}/>
+                            <Route exact path='/todos'
+                                   component={() => <ToDoList todos={this.state.todos}
+                                                              deleteTODO={(id) => this.deleteTODO(id)}/>}/>
                             <Route exact path='/login' component={() => <LoginForm
                                 get_token={(username, password) => this.get_token(username, password)}/>}
                             />
