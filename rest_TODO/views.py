@@ -27,7 +27,7 @@ class ProjectModelViewSet(ModelViewSet):
     pagination_class = ProjectLimitOffsetPagination
 
     def get_queryset(self):
-        """added filtration using request parameters"""
+        """added filtration using request parameters (filters by part of project name"""
         name = self.request.query_params.get('name', '')
         projects = Project.objects.all()
         if name:

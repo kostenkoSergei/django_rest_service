@@ -12,6 +12,8 @@ import Menu from "./components/Menu";
 import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
 // import {HashRouter, Route, Switch, Redirect} from 'react-router-dom'
 import Cookies from 'universal-cookie';
+import ProjectForm from "./components/ProjectForm";
+import TodoForm from "./components/TodoForm";
 
 const NotFound404 = ({location}) => {
     return (
@@ -110,6 +112,47 @@ class App extends React.Component {
         return headers
     }
 
+    deleteProject(id) {
+        const headers = this.get_headers()
+        axios.delete(`http://127.0.0.1:8000/api/projects/${id}`, {headers: headers})
+            .then(response => {
+                this.setState({projects: this.state.projects.filter((item) => item.id !== id)})
+            }).catch(error => console.log(error))
+    }
+
+    deleteTODO(id) {
+        // destroy method for todo makes it's status is_active=False
+        const headers = this.get_headers()
+        axios.delete(`http://127.0.0.1:8000/api/todos/${id}`, {headers: headers})
+            .then(response => {
+                console.log(response.status)
+                this.setState({todos: this.state.todos.filter((item) => item.id !== id)})
+            }).catch(error => console.log(error))
+    }
+
+    createProject(name, repoLink, contributors) {
+        const headers = this.get_headers()
+        const data = {name: name, repo_link: repoLink, contributors: JSON.parse("[" + contributors + "]")}
+        // const data = {name: name, repo_link: repoLink}
+        console.log(data)
+        axios.post(`http://127.0.0.1:8000/api/projects/`, data, {headers: headers})
+            .then(response => {
+                let new_project = response.data
+                this.setState({projects: [...this.state.projects, new_project]})
+            }).catch(error => console.log(error))
+    }
+
+    createTodo(project, noteText, creator) {
+        const headers = this.get_headers()
+        const data = {project: parseInt(project), note_text: noteText, creator: parseInt(creator)}
+        console.log(data)
+        axios.post(`http://127.0.0.1:8000/api/todos/`, data, {headers: headers})
+            .then(response => {
+                let new_todo = response.data
+                this.setState({todos: [...this.state.todos, new_todo]})
+            }).catch(error => console.log(error))
+    }
+
 
     componentDidMount() {
         // this.load_data()
@@ -130,11 +173,19 @@ class App extends React.Component {
                         <Switch>
                             <Route exact path='/' component={() => <UserList users={this.state.users}/>}/>
                             <Route exact path='/projects'
-                                   component={() => <ProjectList projects={this.state.projects}/>}/>
-                            <Route exact path='/todos' component={() => <ToDoList todos={this.state.todos}/>}/>
+                                   component={() => <ProjectList projects={this.state.projects}
+                                                                 deleteProject={(id) => this.deleteProject(id)}/>}/>
+                            <Route exact path='/todos'
+                                   component={() => <ToDoList todos={this.state.todos}
+                                                              deleteTODO={(id) => this.deleteTODO(id)}/>}/>
                             <Route exact path='/login' component={() => <LoginForm
                                 get_token={(username, password) => this.get_token(username, password)}/>}
                             />
+                            <Route exact path='/projects/create' component={() => <ProjectForm
+                                createProject={(name, repoLink, contributors) => this.createProject(name, repoLink, contributors)}/>}/>
+                            <Route exact path='/todos/create'
+                                   component={() => <TodoForm projects={this.state.projects} users={this.state.users}
+                                                              createTodo={(project, noteText, creator) => this.createTodo(project, noteText, creator)}/>}/>
                             <Route path="/project/:id">
                                 <ProjectToDoList todos={this.state.todos}/>
                             </Route>

@@ -1,8 +1,9 @@
 import React from "react";
 import App from "../App";
+import {Link} from "react-router-dom";
 
 
-const ToDoItem = ({todo}) => {
+const ToDoItem = ({todo, deleteTODO}) => {
     let updatedDate = new Date(todo.updatedAt)
     let createdDate = new Date(todo.createdAt)
     return (
@@ -14,12 +15,15 @@ const ToDoItem = ({todo}) => {
             <td scope="col">{createdDate.toISOString().substring(0, 10)}</td>
             <td scope="col">{updatedDate.toISOString().substring(0, 10)}</td>
             <td scope="col">{todo.isActive.toString()}</td>
+            <td>
+                <button onClick={() => deleteTODO(todo.id)} type='button'>Delete</button>
+            </td>
         </tr>
 
     )
 }
 
-const ToDoList = ({todos}) => {
+const ToDoList = ({todos, deleteTODO}) => {
     return (
 
         <div className="container">
@@ -32,12 +36,14 @@ const ToDoList = ({todos}) => {
                     <th scope="col">Created at</th>
                     <th scope="col">Updated at</th>
                     <th scope="col">Status (is active)</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
-                {todos.results.map((todo) => <ToDoItem key={todo.id} todo={todo}/>)}
+                {todos.results.map((todo) => <ToDoItem key={todo.id} todo={todo} deleteTODO={deleteTODO}/>)}
                 </tbody>
             </table>
+            <Link to='/todos/create'>Create</Link>
         </div>
 
     )

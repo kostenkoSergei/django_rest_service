@@ -5,7 +5,7 @@ from rest_users.models import User
 class Project(models.Model):
     name = models.CharField(max_length=64, unique=True, verbose_name='Название проекта')
     repo_link = models.URLField(max_length=200, verbose_name='Ссылка на репозиторий')
-    contributors = models.ManyToManyField(User, verbose_name='Участники')
+    contributors = models.ManyToManyField(User, verbose_name='Участники', default=1)
 
     def __str__(self):
         return self.name
